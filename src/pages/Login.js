@@ -12,9 +12,17 @@ function Login() {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
-        phone_number: phone,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/login`,
+        {
+          phone_number: phone,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const user = res.data;
       localStorage.setItem("user", JSON.stringify(user));
