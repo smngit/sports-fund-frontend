@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 function Summary() {
   const [totalCollected, setTotalCollected] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
@@ -12,12 +14,18 @@ function Summary() {
   const fetchTotals = async () => {
     try {
       const [contribRes, expenseRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/contributions"),
-        axios.get("http://localhost:5000/api/expenses")
+        axios.get(`${API_BASE}/contributions`),
+        axios.get(`${API_BASE}/expenses`)
       ]);
 
-      const collected = contribRes.data.reduce((sum, item) => sum + parseFloat(item.amount), 0);
-      const spent = expenseRes.data.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+      const collected = contribRes.data.reduce(
+        (sum, item) => sum + parseFloat(item.amount),
+        0
+      );
+      const spent = expenseRes.data.reduce(
+        (sum, item) => sum + parseFloat(item.amount),
+        0
+      );
 
       setTotalCollected(collected);
       setTotalSpent(spent);

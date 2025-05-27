@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 Modal.setAppElement("#root");
 
 function Expenses() {
@@ -28,7 +30,7 @@ function Expenses() {
   }, []);
 
   const fetchExpenses = () => {
-    let url = "http://localhost:5000/api/expenses";
+    let url = `${API_BASE}/expenses`;
     if (filterMonth) {
       url += `?month=${encodeURIComponent(filterMonth)}`;
     }
@@ -36,7 +38,7 @@ function Expenses() {
   };
 
   const fetchUsers = () => {
-    axios.get("http://localhost:5000/api/users").then((res) => setUsers(res.data));
+    axios.get(`${API_BASE}/users`).then((res) => setUsers(res.data));
   };
 
   const handleChange = (e) => {
@@ -45,15 +47,21 @@ function Expenses() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/api/expenses", formData).then(() => {
-      setFormData({ description: "", amount: "", date: "", month: "", created_by: "" });
+    axios.post(`${API_BASE}/expenses`, formData).then(() => {
+      setFormData({
+        description: "",
+        amount: "",
+        date: "",
+        month: "",
+        created_by: ""
+      });
       fetchExpenses();
     });
   };
 
   const handleDelete = (id) => {
     if (window.confirm("Delete this expense?")) {
-      axios.delete(`http://localhost:5000/api/expenses/${id}`).then(() => fetchExpenses());
+      axios.delete(`${API_BASE}/expenses/${id}`).then(() => fetchExpenses());
     }
   };
 
@@ -73,7 +81,7 @@ function Expenses() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/expenses/${editData.expense_id}`, editData).then(() => {
+    axios.put(`${API_BASE}/expenses/${editData.expense_id}`, editData).then(() => {
       closeEditModal();
       fetchExpenses();
     });
@@ -97,7 +105,7 @@ function Expenses() {
         <br /><br />
         {currentUserRole === "admin" && (
           <button
-            onClick={() => window.open("http://localhost:5000/api/export/expenses", "_blank")}
+            onClick={() => window.open(`${API_BASE}/export/expenses`, "_blank")}
             style={{ marginTop: "10px" }}
           >
             Export Expenses CSV

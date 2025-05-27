@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 Modal.setAppElement("#root");
 
 function Contributions() {
@@ -24,7 +26,7 @@ function Contributions() {
   }, []);
 
   const fetchContributions = () => {
-    let url = "http://localhost:5000/api/contributions";
+    let url = `${API_BASE}/contributions`;
     const params = [];
     if (filterUserId) params.push(`user_id=${filterUserId}`);
     if (filterMonth) params.push(`month=${encodeURIComponent(filterMonth)}`);
@@ -33,7 +35,7 @@ function Contributions() {
   };
 
   const fetchUsers = () => {
-    axios.get("http://localhost:5000/api/users")
+    axios.get(`${API_BASE}/users`)
       .then((res) => setUsers(res.data));
   };
 
@@ -43,7 +45,7 @@ function Contributions() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/api/contributions", formData)
+    axios.post(`${API_BASE}/contributions`, formData)
       .then(() => {
         setFormData({ user_id: "", amount: "", date: "", month: "" });
         fetchContributions();
@@ -52,7 +54,7 @@ function Contributions() {
 
   const handleDelete = (id) => {
     if (window.confirm("Delete this contribution?")) {
-      axios.delete(`http://localhost:5000/api/contributions/${id}`)
+      axios.delete(`${API_BASE}/contributions/${id}`)
         .then(() => fetchContributions());
     }
   };
@@ -76,7 +78,7 @@ function Contributions() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/contributions/${editData.contribution_id}`, editData)
+    axios.put(`${API_BASE}/contributions/${editData.contribution_id}`, editData)
       .then(() => {
         closeEditModal();
         fetchContributions();
@@ -110,7 +112,7 @@ function Contributions() {
         }}>Clear</button>
         <br /><br />
         {currentUserRole === "admin" && (
-          <button onClick={() => window.open("http://localhost:5000/api/export/contributions", "_blank")}>
+          <button onClick={() => window.open(`${API_BASE}/export/contributions`, "_blank")}>
             Export Contributions CSV
           </button>
         )}

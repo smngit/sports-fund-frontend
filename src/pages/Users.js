@@ -4,6 +4,8 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 function Users() {
   const user = JSON.parse(localStorage.getItem("user"));
   const currentUserRole = user?.role || "member";
@@ -24,7 +26,7 @@ function Users() {
   }, []);
 
   const fetchUsers = () => {
-    axios.get("http://localhost:5000/api/users")
+    axios.get(`${API_BASE}/users`)
       .then((res) => setUsers(res.data));
   };
 
@@ -34,7 +36,7 @@ function Users() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/api/users", formData)
+    axios.post(`${API_BASE}/users`, formData)
       .then(() => {
         setFormData({ name: "", phone_number: "", email: "", role: "member" });
         fetchUsers();
@@ -43,7 +45,7 @@ function Users() {
 
   const handleDelete = (id) => {
     if (window.confirm("Delete this user?")) {
-      axios.delete(`http://localhost:5000/api/users/${id}`)
+      axios.delete(`${API_BASE}/users/${id}`)
         .then(() => fetchUsers());
     }
   };
@@ -64,7 +66,7 @@ function Users() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/users/${editData.user_id}`, editData)
+    axios.put(`${API_BASE}/users/${editData.user_id}`, editData)
       .then(() => {
         closeEditModal();
         fetchUsers();
@@ -78,7 +80,7 @@ function Users() {
       {/* Export */}
       {currentUserRole === "admin" && (
         <button
-          onClick={() => window.open("http://localhost:5000/api/export/users", "_blank")}
+          onClick={() => window.open(`${API_BASE}/export/users`, "_blank")}
           style={{ marginBottom: "20px" }}
         >
           Export Users CSV
