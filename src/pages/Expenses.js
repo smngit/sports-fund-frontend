@@ -147,9 +147,9 @@ function Expenses() {
           </tr>
         </thead>
         <tbody>
-          {expenses.map(e => (
+          {expenses.map((e, index) => (
             <tr key={e.expense_id}>
-              <td>{e.expense_id}</td>
+              <td>{index + 1}</td>
               <td>{e.description}</td>
               <td>{e.amount}</td>
               <td>{e.date}</td>

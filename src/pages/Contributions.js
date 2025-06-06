@@ -150,9 +150,9 @@ function Contributions() {
           </tr>
         </thead>
         <tbody>
-          {contributions.map(c => (
+          {contributions.map((c, index) => (
             <tr key={c.contribution_id}>
-              <td>{c.contribution_id}</td>
+              <td>{index + 1}</td>
               <td>{users.find(u => u.user_id === c.user_id)?.name || c.user_id}</td>
               <td>{c.amount}</td>
               <td>{c.date}</td>
